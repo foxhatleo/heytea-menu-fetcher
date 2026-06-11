@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //
 // boba.js — fetch the HeyTea menu and track changes over time.
-// boba.js —— 抓取喜茶菜单,追踪每次变化。
+// boba.js —— 抓取喜茶菜单，追踪每次变化。
 //
 // Each run / 每次运行:
 //   1. Fetches the live menu from the HeyTea API.
@@ -14,7 +14,7 @@
 //      写入新快照 ./boba_latest_<YYYYMMDDhhmmss>.csv
 //   5. Renames any prior boba_latest_*.csv to drop "_latest_",
 //      so only the newest snapshot ever wears that marker.
-//      将旧的 boba_latest_*.csv 重命名,去掉 "_latest_",
+//      将旧的 boba_latest_*.csv 重命名，去掉 "_latest_"，
 //      保证只有最新的一份带这个标记。
 //
 // Run `node boba.js --help` for CLI options.
@@ -145,7 +145,7 @@ const log = {
 // than the code below.
 //
 // 喜茶菜单调整时需要改的内容都集中在本区块。每个小节都说明了
-// 它过滤了什么以及为什么。改行为时直接编辑下面的列表 / 映射,
+// 它过滤了什么以及为什么。改行为时直接编辑下面的列表 / 映射，
 // 一般不必动后面的代码。
 //
 
@@ -176,7 +176,7 @@ const ARCHIVE_RE = /^boba_(\d{14})\.csv$/;
 // listing "Test" filters anything *containing* the word "Test".
 //
 // 用 SUBSTRING (子串) 与去空格后的分类名做匹配。例如把 "Test"
-// 列进去,任何 *含* "Test" 的分类都会被过滤。
+// 列进去，任何 *含* "Test" 的分类都会被过滤。
 //
 // To stop ignoring a category, delete its line. To add one, append a
 // new line with a short comment explaining what it is.
@@ -184,13 +184,13 @@ const ARCHIVE_RE = /^boba_(\d{14})\.csv$/;
 const IGNORED_CATEGORIES = [
   // promo / one-off campaign items / 一次性活动促销商品
   'Activity products',
-  // marketing rotation; dupes of real items / 营销轮播,与菜单重复
+  // marketing rotation; dupes of real items / 营销轮播，与菜单重复
   'Hot Picks',
   // marketing rotation / 营销轮播
   'Staff Picks',
   // internal / pilot items / 内部 / 试点商品
   'Special projects',
-  // toppings & add-ons, not drinks / 配料 / 加料,不是饮品
+  // toppings & add-ons, not drinks / 配料 / 加料，不是饮品
   'Extra',
   // "Super Plant Tea", CN-only seasonal line / 中文区季节限定
   '超级植物茶',
@@ -231,9 +231,9 @@ const NAME_REPLACEMENTS = [
 //       we want a specific Chinese pairing.
 //
 // 在以下情况会覆盖 API 给出的中文 SKU 名:
-//   (a) API 没有中文名或中文名不对,
-//   (b) API 名中带营销后缀(例如 "(首创)"),
-//   (c) NAME_REPLACEMENTS 把多个 SKU 合并到同一个英文名,
+//   (a) API 没有中文名或中文名不对，
+//   (b) API 名中带营销后缀(例如 "(首创)")，
+//   (c) NAME_REPLACEMENTS 把多个 SKU 合并到同一个英文名，
 //       需要明确指定中文对应。
 //
 // Keys must match the English name AFTER NAME_REPLACEMENTS has run.
@@ -279,21 +279,21 @@ const CHINESE_NAME_OVERRIDES = {
 // ----------------------------------------------------------------------------
 // Applied after the override lookup, to both API names and overrides.
 // Right now it's just the "(首创)" marketing tag.
-// 在 override 查找之后执行,既作用于 API 名也作用于 override 名。
+// 在 override 查找之后执行，既作用于 API 名也作用于 override 名。
 // 目前只剥 "(首创)" 这个营销标签。
 const CHINESE_NAME_STRIPS = ['(首创)'];
 
 // ----------------------------------------------------------------------------
 // shouldSkipProduct — drop individual products regardless of category.
-// shouldSkipProduct —— 不分类别,单独丢弃的商品规则。
+// shouldSkipProduct —— 不分类别，单独丢弃的商品规则。
 // ----------------------------------------------------------------------------
 // A function rather than a list because the rules are pattern-based:
 //   - "(Large Cup)" entries are size-variant duplicates of the real SKU.
 //   - Names ending in "Set" are bundle / combo SKUs we don't track.
 //
-// 用函数而非列表,因为规则是模式匹配:
-//   - 含 "(Large Cup)" 的是大杯版,会与正常 SKU 重复。
-//   - 以 "Set" 结尾的是套餐 / 组合,不在追踪范围。
+// 用函数而非列表，因为规则是模式匹配:
+//   - 含 "(Large Cup)" 的是大杯版，会与正常 SKU 重复。
+//   - 以 "Set" 结尾的是套餐 / 组合，不在追踪范围。
 function shouldSkipProduct(name) {
   return name.includes('(Large Cup)') || name.endsWith('Set');
 }
@@ -352,7 +352,7 @@ function rowsToCSV(rows) {
 
 // Tiny RFC-4180-ish CSV parser. Sufficient for our own output, not for
 // arbitrary CSV input.
-// 极简 CSV 解析器(近似 RFC 4180),够解析自己产出的文件,
+// 极简 CSV 解析器(近似 RFC 4180)，够解析自己产出的文件，
 // 不要拿去吃任意 CSV。
 function parseCSV(filePath) {
   const content = fs.readFileSync(filePath, 'utf8');
@@ -398,7 +398,7 @@ function parseCSV(filePath) {
 // ============================================================================
 
 // Current SF wall-clock time as YYYYMMDDhhmmss.
-// 当前旧金山墙上时间,格式 YYYYMMDDhhmmss。
+// 当前旧金山墙上时间，格式 YYYYMMDDhhmmss。
 function sfTimestamp() {
   const sf = new Date(
     new Date().toLocaleString('en-US', {
@@ -413,7 +413,7 @@ function sfTimestamp() {
 }
 
 // Human-readable label for a 14-digit timestamp, e.g. "2026-05-22 11:03 PT".
-// 把 14 位时间戳格式化成易读样式,例如 "2026-05-22 11:03 PT"。
+// 把 14 位时间戳格式化成易读样式，例如 "2026-05-22 11:03 PT"。
 function formatTimestamp(ts) {
   if (!/^\d{14}$/.test(ts)) return ts;
   return (
@@ -425,9 +425,9 @@ function formatTimestamp(ts) {
 // Return { path, name, ts } for the most recent snapshot on disk, or null.
 // Considers BOTH boba_latest_*.csv (the current marker) and the legacy
 // boba_*.csv files, so the diff still works during/after the rollover.
-// 返回磁盘上最新一个快照的 { path, name, ts },没有则返回 null。
-// 同时考虑 boba_latest_*.csv(当前格式)与历史 boba_*.csv 文件,
-// 在切换文件名规则前后,diff 都不会断。
+// 返回磁盘上最新一个快照的 { path, name, ts }，没有则返回 null。
+// 同时考虑 boba_latest_*.csv(当前格式)与历史 boba_*.csv 文件，
+// 在切换文件名规则前后，diff 都不会断。
 function findPreviousSnapshot() {
   let files;
   try {
@@ -457,7 +457,7 @@ function findPreviousSnapshot() {
 // Rename any existing boba_latest_*.csv to drop the "_latest_" so only
 // the file we are about to write carries that marker. Returns the list
 // of renames performed.
-// 把已有的 boba_latest_*.csv 重命名,去掉 "_latest_",保证只有
+// 把已有的 boba_latest_*.csv 重命名，去掉 "_latest_"，保证只有
 // 即将写入的新文件带这个标记。返回所做的重命名记录。
 function archivePreviousLatest() {
   const files = fs.readdirSync(OUTPUT_DIR);
@@ -592,7 +592,7 @@ function buildItemMap(rows) {
   const map = new Map();
   // Skip header (row 0). Row 1 is the "Nothing" sentinel — harmless to
   // include since both sides have it and it never reports as changed.
-  // 跳过表头(第 0 行)。第 1 行是 "Nothing" 占位,两边都有,
+  // 跳过表头(第 0 行)。第 1 行是 "Nothing" 占位，两边都有，
   // 不会被误判为变化。
   for (let i = 1; i < rows.length; i++) {
     const [name, , category] = rows[i];
@@ -662,7 +662,7 @@ function printDiff(previous, diff) {
   );
 
   // Build a one-line summary like "+3 added  -1 removed  ~2 moved".
-  // 构造一行汇总,例如 "+3 added  -1 removed  ~2 moved"。
+  // 构造一行汇总，例如 "+3 added  -1 removed  ~2 moved"。
   const summary = [];
   if (added.length) {
     summary.push(paint('green', `+${added.length} added`));
